@@ -11,9 +11,9 @@ class LevenshteinDistance {
             if (word1[0] == word2[0])
                 return calculateDistance(word1.tail(), word2.tail())
             return 1 + minOf(
-                    calculateDistance(word1.tail(), word2),
-                    calculateDistance(word1, word2.tail()),
-                    calculateDistance(word1.tail(), word2.tail())
+                calculateDistance(word1.tail(), word2),
+                calculateDistance(word1, word2.tail()),
+                calculateDistance(word1.tail(), word2.tail())
             )
         }
 
