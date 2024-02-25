@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.8.21"
     application
+    id("io.ktor.plugin") version "2.2.3"
 }
 
 group = "com.julian-sauer"
@@ -25,5 +26,11 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("com.juliansauer.bktree.MainKt")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("bk-tree.jar")
+    }
 }

@@ -8,13 +8,13 @@ import com.juliansauer.bktree.tree.Tree
 val tree = Tree()
 
 fun main() {
-    println("Available commands: ${CommandTypes.values().joinToString(", ")}")
+    println("> Available commands: ${CommandTypes.values().joinToString(", ")}")
     while (true) {
         val input = readln()
         val arguments = input.split(" ")
         val command = CommandTypes.valueOf(arguments[0].uppercase())
         if (arguments.size != command.expectedArguments) {
-            println("Invalid number of arguments for command $command, expected ${command.expectedArguments} but got ${arguments.size}")
+            println("> Invalid number of arguments for command $command, expected ${command.expectedArguments} but got ${arguments.size}")
             continue
         }
 
@@ -36,20 +36,20 @@ private fun load(arguments: List<String>) {
     val size = arguments[2].toInt()
     val words = WordList.loadWords(fileName, size)
     tree.insert(words)
-    println("Inserted ${words.size} words into the tree")
+    println("> Inserted ${words.size} words into the tree")
 }
 
 private fun insert(arguments: List<String>) {
     val word = arguments[1]
     tree.insert(word)
-    println("Inserted $word into the tree")
+    println("> Inserted $word into the tree")
 }
 
 private fun search(arguments: List<String>) {
     val wordToSearchFor = arguments[1]
     val maxDistance = arguments[2].toInt()
     val similarWords = tree.similarWords(wordToSearchFor, maxDistance)
-    println(similarWords)
+    println("> $similarWords")
 }
 
 fun Tree.print() {

@@ -24,7 +24,6 @@ class Tree {
         if (root == null) return listOf()
 
         val result = similarWords(root!!, word, maxDistance, 0)
-        println("Searched nodes: ${result.second}")
         return result.first
     }
 
