@@ -1,39 +1,55 @@
 package com.juliansauer.bktree
 
+import com.juliansauer.bktree.io.CommandTypes
 import com.juliansauer.bktree.io.WordList
 import com.juliansauer.bktree.tree.Node
 import com.juliansauer.bktree.tree.Tree
-import kotlin.system.measureTimeMillis
+
+val tree = Tree()
 
 fun main() {
-    val words = WordList.getWords("frequent-words.txt", 1000)
+    println("Available commands: ${CommandTypes.values().joinToString(", ")}")
+    while (true) {
+        val input = readln()
+        val arguments = input.split(" ")
+        val command = CommandTypes.valueOf(arguments[0].uppercase())
+        if (arguments.size != command.expectedArguments) {
+            println("Invalid number of arguments for command $command, expected ${command.expectedArguments} but got ${arguments.size}")
+            continue
+        }
 
-    val tree = Tree()
-    println(measureTimeMillis { tree.insert(words) })
+        when (command) {
+            CommandTypes.LOAD -> load(arguments)
 
-    var word = tree.spellCheck("Buch", 0)
-    println("Word found: $word")
+            CommandTypes.INSERT -> insert(arguments)
 
-    word = tree.spellCheck("mal", 0)
-    println("Word found: $word")
+            CommandTypes.SEARCH -> search(arguments)
 
-    word = tree.spellCheck("fest", 0)
-    println("Word found: $word")
+            CommandTypes.PRINT -> tree.print()
+            CommandTypes.EXIT -> return
+        }
+    }
+}
 
-    word = tree.spellCheck("Publikum", 0)
-    println("Word found: $word")
+private fun load(arguments: List<String>) {
+    val fileName = arguments[1]
+    val size = arguments[2].toInt()
+    val words = WordList.loadWords(fileName, size)
+    tree.insert(words)
+    println("Inserted ${words.size} words into the tree")
+}
 
-    word = tree.spellCheck("Bxch", 1)
-    println("Word found: $word")
+private fun insert(arguments: List<String>) {
+    val word = arguments[1]
+    tree.insert(word)
+    println("Inserted $word into the tree")
+}
 
-    word = tree.spellCheck("mxl", 1)
-    println("Word found: $word")
-
-    word = tree.spellCheck("fxst", 1)
-    println("Word found: $word")
-
-    word = tree.spellCheck("ublikum", 1)
-    println("Word found: $word")
+private fun search(arguments: List<String>) {
+    val wordToSearchFor = arguments[1]
+    val maxDistance = arguments[2].toInt()
+    val similarWords = tree.similarWords(wordToSearchFor, maxDistance)
+    println(similarWords)
 }
 
 fun Tree.print() {
